@@ -12,7 +12,7 @@ class LeLivrosNotificationSpider(Spider):
         super(LeLivrosNotificationSpider, self).__init__(*args, **kwargs)
 
         if emails is None:
-            emails = list()
+            emails = str()
 
         self.addresses = re.split('[,\s]+', emails)
 
@@ -35,7 +35,12 @@ class LeLivrosNotificationSpider(Spider):
 
     def parse(self, response):
         self.path = data_path()
-        self.logger.info(self.path)
+
+        try:
+            with open(self.path + 'last_url', 'r') as f:
+                url = f.read()
+        except FileNotFoundError:
+            url = str()
 
         url = response.url
         # match = re.search(r'\d+', url)
